@@ -3,9 +3,147 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Landing Page</title>
+    <link rel="stylesheet" href="/static/bettermotherfuckingwebsite.com.css" />
+    <link rel="stylesheet" href="/static/custom.css" />
+    <title>Using HHVM in 2025</title>
   </head>
   <body>
-    Test 1... 2... 3...
+    <article>
+      <header class="center compact">
+        <hgroup>
+          <h1>Using the Hip Hop Virtual Machine</h1>
+          <p>in 2025 and beyond</p>
+        </hgroup>
+        <time datetime="2025-07-05">Published on July 5, 2025</time>
+      </header>
+      <hr />
+
+      <hgroup>
+        <h2>What Is HHVM?</h2>
+        <p>
+          The Hip Hop Virtual Machine, HHVM for short, is the runtime for the
+          Hack programming language. In the 2010s, HHVM could also be used to
+          run PHP code at blazing speeds. This is no longer supported. If you
+          came here for a tutorial on how to speed up your PHP applications, I
+          direct you to <a href="https://php.net">PHP.net</a>.
+        </p>
+      </hgroup>
+
+      <hgroup>
+        <h2>What Is Hack?</h2>
+        <p>
+          Hack is a general-purpose programming language created at Meta. If you
+          are interested in what Hack does well, you can read the
+          <a href="https://hacklang.org/">Hack user documentation</a>. In short,
+          the Hack programming language is predominantly used on web servers to
+          render dynamic pages or API responses for use in websites. The syntax
+          looks like PHP, and that is on purpose. The facebook.com project has
+          been incrementally migrated from PHP to Hack. Hack has diverged from
+          PHP in some ways, but any PHP developer should still be able to pick
+          up Hack in an afternoon and start hacking away.
+        </p>
+      </hgroup>
+
+      <hgroup>
+        <h2>How to Install HHVM?</h2>
+        <p>
+          The
+          <a href="https://docs.hhvm.com/hhvm/installation/introduction"
+            >official installation instructions</a
+          >
+          are very outdated. They require you to run Ubuntu 20.04 Focal Fossa,
+          which was released in 2020. You probably want to run something newer.
+          I strongly recommend running HHVM in a Docker container, both on your
+          developer machine and on your servers. I publish HHVM containers to
+          <a href="https://hub.docker.com/u/hersheltheodorelayton">Docker Hub</a
+          >. These containers are much newer than the
+          <a href="https://hub.docker.com/u/hhvm">official containers</a>
+          published by the HHVM Project.
+          <i
+            >I want to give special thanks to
+            <a href="https://github.com/mszabo-wikia">Máté Szabó</a> for dealing
+            with all the difficult C++ and CMake problems. Without him, I could
+            not build these containers.</i
+          >
+          If you do not have Docker installed, follow the official
+          <a href="https://docs.docker.com/engine/install/"
+            >installation instructions</a
+          >.
+        </p>
+      </hgroup>
+
+      <hgroup>
+        <h2>Linux Kernel Prerequisites</h2>
+        <p>
+          Before you start, you must check your Linux kernel version. You can do
+          so using <code>uname -a</code>. If your kernel version is 6.9 or
+          below, you need to upgrade your kernel. At the time of writing, both
+          the latest Ubuntu LTS, 24.04 Noble Numbat, and the latest stable
+          Debian release, Bookworm 12, do not ship with a 6.10 or greater
+          kernel. On Ubuntu 24.04, you can install the
+          <a href="https://ubuntu.com/kernel/lifecycle"
+            >Hardware Enablement Stack</a
+          >. On Debian 12, you can use the
+          <a href="https://packages.debian.org/bookworm-backports/kernel-image"
+            >Backports Kernel</a
+          >.
+        </p>
+      </hgroup>
+
+      <hgroup id="devenv">
+        <h2>Development Environment</h2>
+        <p>
+          I recommend VS Code or any of its forks to anyone just starting out
+          with Hack. I personally use VSCodium, a community-driven,
+          freely-licensed binary distribution of Microsoft's editor VS Code.
+          Install VS Code or one of its forks. Press
+          <code>Ctrl+Shift+X</code> to open the Extensions pane. If this
+          shortcut doesn't work, open the command palette and use
+          <code>Extensions: Focus on Marketplace View</code>. Look for
+          <code>pranayagarwal.vscode-hack</code>. Install this extension. If you
+          are using a fork of VS Code, but not Visual Studio Code itself, search
+          for
+          <code>
+            hershel-theodore-layton.dead-simple-lint-server-integration</code
+          >. For Visual Studio Code users, download the VSIX from
+          <a
+            href="https://open-vsx.org/extension/hershel-theodore-layton/dead-simple-lint-server-integration"
+            >OpenVSX</a
+          >
+          and install it manually using
+          <code>Extensions: Install from VSIX</code>.
+        </p>
+      </hgroup>
+
+      <hgroup>
+        <h2>Hello, World!</h2>
+        <p>
+          Let's create your first Hack program. Let's start with a bare project.
+          I have created one here: <b>[TODO: link]</b>. Copy this project into
+          an empty directory. Now, let's start by running
+          <code>docker compose up</code>. This will create a
+          <code>.vscode</code> and a <code>vendor</code> directory for you. Your
+          IDE will now request a restart. After the restart, you should see one
+          problem in the <code>Problems</code> pane. This problem will guide you
+          to <code>file.hack</code>.
+          <i>file.hack(6, 44): This could be a single-quoted string.</i> Change
+          the <code>"Hello, World!"</code> string to
+          <code>"Hello, World!\n"</code> and this problem should go away. If it
+          does not, do not worry; you can run the program regardless. Run
+          <code>docker compose exec hhvm hhvm src/file.hack</code> from the same
+          directory as your <code>Dockerfile</code>, and you will see
+          <code>Hello, World!</code> printed to the console.
+        </p>
+      </hgroup>
+
+      <hgroup>
+        <h2>What's Next?</h2>
+        <p>
+          Now that you have an Hello, World!, you can start developing a real
+          application. For that, you will need some libraries. More on this
+          soon.
+        </p>
+      </hgroup>
+    </article>
   </body>
 </html>

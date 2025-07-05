@@ -1,0 +1,53 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "ba30b652ecb3e78ff95d0d68c0f9f559",
+    "packages": [],
+    "packages-dev": [
+        {
+            "name": "hershel-theodore-layton/portable-hack-ast-linters-server",
+            "version": "v0.3.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hershel-theodore-layton/portable-hack-ast-linters-server.git",
+                "reference": "a4011fa8fef397f51792a65533a3891243843962"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hershel-theodore-layton/portable-hack-ast-linters-server/zipball/a4011fa8fef397f51792a65533a3891243843962",
+                "reference": "a4011fa8fef397f51792a65533a3891243843962",
+                "shasum": ""
+            },
+            "require": {
+                "hhvm": ">=4.128"
+            },
+            "bin": [
+                "bin/pha-linters-server.sh"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A non-Hack distribution of PhaLinters to allow HTL packages to use portable-hack-ast-linters without circular dependencies.",
+            "support": {
+                "issues": "https://github.com/hershel-theodore-layton/portable-hack-ast-linters-server/issues",
+                "source": "https://github.com/hershel-theodore-layton/portable-hack-ast-linters-server/tree/v0.3.5"
+            },
+            "time": "2025-07-05T15:37:35+00:00"
+        }
+    ],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {},
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "hhvm": ">=25.7"
+    },
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
+}

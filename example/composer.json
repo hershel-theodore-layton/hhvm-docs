@@ -1,0 +1,8 @@
+{
+    "require": {
+        "hhvm": ">=25.7"
+    },
+    "require-dev": {
+        "hershel-theodore-layton/portable-hack-ast-linters-server": "*"
+    }
+}

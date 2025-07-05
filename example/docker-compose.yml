@@ -1,0 +1,12 @@
+services:
+  hhvm:
+    container_name: hhvm-getting-started-example
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - type: bind
+        source: .
+        target: /mnt/project
+    ports:
+      - 48001:10641

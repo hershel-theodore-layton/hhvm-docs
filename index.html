@@ -29,7 +29,9 @@
           2022, which contain known security vulnerabilities. I have built
           Docker containers with hhvm@next. Compiling hhvm from source is no
           easy feat and I could not have done it without the help of
-          <a href="https://github.com/mszabo-wikia">Máté Szabó</a>.
+          <a href="https://github.com/mszabo-wikia" target="_blank"
+            >Máté Szabó</a
+          >.
         </p>
       </hgroup>
 
@@ -40,7 +42,7 @@
           Hack programming language. In the 2010s, HHVM could also be used to
           run PHP code at blazing speeds. This is no longer supported. If you
           came here for a tutorial on how to speed up your PHP applications, I
-          direct you to <a href="https://php.net">PHP.net</a>.
+          direct you to <a href="https://php.net" target="_blank">PHP.net</a>.
         </p>
       </hgroup>
 
@@ -49,13 +51,14 @@
         <p>
           Hack is a general-purpose programming language created at Meta. If you
           are interested in what Hack does well, you can read the
-          <a href="https://hacklang.org/">Hack user documentation</a>. In short,
-          the Hack programming language is predominantly used on web servers to
-          render dynamic pages or API responses for use in websites. The syntax
-          looks like PHP, and that is on purpose. The facebook.com project has
-          been incrementally migrated from PHP to Hack. Hack has diverged from
-          PHP in some ways, but any PHP developer should still be able to pick
-          up Hack in an afternoon and start hacking away.
+          <a href="https://hacklang.org/" target="_blank"
+            >Hack user documentation</a
+          >. In short, the Hack programming language is predominantly used on
+          web servers to render dynamic pages or API responses for use in
+          websites. The syntax looks like PHP, and that is on purpose. The
+          facebook.com project has been incrementally migrated from PHP to Hack.
+          Hack has diverged from PHP in some ways, but any PHP developer should
+          still be able to pick up Hack in an afternoon and start hacking away.
         </p>
       </hgroup>
 
@@ -63,25 +66,34 @@
         <h2>How to Install HHVM?</h2>
         <p>
           The
-          <a href="https://docs.hhvm.com/hhvm/installation/introduction"
+          <a
+            href="https://docs.hhvm.com/hhvm/installation/introduction"
+            target="_blank"
             >official installation instructions</a
           >
           are very outdated. They require you to run Ubuntu 20.04 Focal Fossa,
           which was released in 2020. You probably want to run something newer.
           I strongly recommend running HHVM in a Docker container, both on your
           developer machine and on your servers. I publish HHVM containers to
-          <a href="https://hub.docker.com/u/hersheltheodorelayton">Docker Hub</a
+          <a
+            href="https://hub.docker.com/u/hersheltheodorelayton"
+            target="_blank"
+            >Docker Hub</a
           >. These containers are much newer than the
-          <a href="https://hub.docker.com/u/hhvm">official containers</a>
+          <a href="https://hub.docker.com/u/hhvm" target="_blank"
+            >official containers</a
+          >
           published by the HHVM Project.
           <i
             >I want to give special thanks to
-            <a href="https://github.com/mszabo-wikia">Máté Szabó</a> for dealing
-            with all the difficult C++ and CMake problems. Without him, I could
-            not build these containers.</i
+            <a href="https://github.com/mszabo-wikia" target="_blank"
+              >Máté Szabó</a
+            >
+            for dealing with all the difficult C++ and CMake problems. Without
+            him, I could not build these containers.</i
           >
           If you do not have Docker installed, follow the official
-          <a href="https://docs.docker.com/engine/install/"
+          <a href="https://docs.docker.com/engine/install/" target="_blank"
             >installation instructions</a
           >.
         </p>
@@ -96,10 +108,12 @@
           the latest Ubuntu LTS, 24.04 Noble Numbat, and the latest stable
           Debian release, Bookworm 12, do not ship with a 6.10 or greater
           kernel. On Ubuntu 24.04, you can install the
-          <a href="https://ubuntu.com/kernel/lifecycle"
+          <a href="https://ubuntu.com/kernel/lifecycle" target="_blank"
             >Hardware Enablement Stack</a
           >. On Debian 12, you can use the
-          <a href="https://packages.debian.org/bookworm-backports/kernel-image"
+          <a
+            href="https://packages.debian.org/bookworm-backports/kernel-image"
+            target="_blank"
             >Backports Kernel</a
           >.
         </p>
@@ -123,6 +137,7 @@
           >. For Visual Studio Code users, download the VSIX from
           <a
             href="https://open-vsx.org/extension/hershel-theodore-layton/dead-simple-lint-server-integration"
+            target="_blank"
             >OpenVSX</a
           >
           and install it manually using
@@ -137,6 +152,7 @@
           I have created one here:
           <a
             href="https://github.com/hershel-theodore-layton/hhvm-docs/tree/master/example"
+            target="_blank"
             >Example Project</a
           >. Copy this project into an empty directory. Now, let's start by
           running <code>docker compose up</code>. This will create a

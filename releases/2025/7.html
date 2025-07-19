@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="../../static/bettermotherfuckingwebsite.com.css"
+    />
+    <link rel="stylesheet" href="../../static/custom.css" />
+    <title>HHVM 25.7.0 Release Notes</title>
+  </head>
+  <body>
+    <hgroup>
+      <h1>HHVM 25.7.0</h1>
+      <p><a href="./6.html">Previous release 25.6.0</a></p>
+      <!-- <p><a href="./8.html">Next release 25.8.0</a></p> -->
+    </hgroup>
+
+    <article>
+      <section>
+        <h2>Typechecker Improvements</h2>
+        <ul>
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/95e848e66c183bfd9d800e15de30dcb3879373a2"
+              target="_blank"
+              >Commit by mheiber: correct handling of parent:: and self</a
+            >
+            This applies to the method attribute
+            <code>&lt;__NeedsConcrete&gt;</code>. If you mark a method on an
+            abstract type with this attribute, all calls to this method must
+            originate from a non-abstract type. This is useful when you need to
+            call other methods your declared as abstract on yourself. This
+            change makes some false positive errors go away.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/7c45cf525ea1212eed31754773299a086536c4ba"
+              target="_blank"
+              >Commit by Michael Thomas : Fix bug which disallows all wildcard
+              hints in poly lambda</a
+            >
+            It is now possible to use <code>$x is vec&lt;_&gt;</code> in a
+            lambda with a generic. You can write generic lambdas like so<br />
+            <code>$refl = function&lt;T&gt;(T $t): T { return $t; };</code>
+            This is new in hhvm@next. HHVM tried to prevent you from writing
+            taking a parameter of type <code>vec&lt;_&gt;</code>, since an
+            underscore in a generic parameter does not make sense. This check
+            accidentally banned the use of underscored generics everywhere in
+            the lambda, including the body, where <code>as</code> and
+            <code>is</code> expressions can be used.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/9b7f7a647c8b1f821fe47aad88f5d21232908900"
+              target="_blank"
+              >Commit by mheiber: reified check: be more careful leaking type
+              params through this</a
+            >
+            You are not allowed to reify a type parameter with an erased inner
+            generic. You are <i>sometimes</i> allowed to reify the
+            <code>this</code> type. This commit adds a check to make sure that
+            the <code>this</code> type you are reifying does not include an
+            erased type parameter.
+            <a
+              href="https://github.com/facebook/hhvm/blob/9b7f7a647c8b1f821fe47aad88f5d21232908900/hphp/hack/test/typecheck/reified_generics/this_in_final_class_with_tparam.php"
+              >This code</a
+            >
+            now raises a type error.
+          </li>
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/af60977aab1b0069ffc67f424146d78c9f0d80f7"
+              target="_blank"
+              >Commit by vassilmladenov: Kill the old class_pointer_levels
+              flags, simplify errors</a
+            >
+            The following new typechecker options have been introduced:
+            <code>class_pointer_ban_classname_new</code>,
+            <code>class_pointer_ban_classname_type_structure</code>,
+            <code>class_pointer_ban_classname_static_prop</code>,
+            <code>class_pointer_ban_classname_static_meth</code>,
+            <code>class_pointer_ban_classname_class_const</code>,
+            <code>class_pointer_ban_class_array_key</code>
+            <br />
+
+            It is now an error to use a <code>classname&lt;T&gt;</code> in
+            places where a <code>string</code> is expected. You will see this
+            typechecker error:
+            <i
+              >Using `SomeType::class` in this position will trigger an implicit
+              runtime conversion to string, please use `nameof SomeType`</i
+            >. <code>nameof</code> is not valid in the HHVM 4 series.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/f696b2fb3070a0c992c5618974416ae83d71c3f2"
+              target="_blank"
+              >Commit by viratyosin: Add error for recursive dependencies in
+              where clauses of case types</a
+            >
+            This only affects <code>case type X = Y</code>, not the classic
+            <code>type X = Y</code> or <code>newtype X = Y</code> type aliases.
+            The typechecker will now report an error if a where clause depends
+            on its own type.
+
+            <a
+              href="https://github.com/facebook/hhvm/blob/f696b2fb3070a0c992c5618974416ae83d71c3f2/hphp/hack/test/typecheck/case_type/where_clauses/non_fixed_point_recursion_via_case_type_hint.php"
+              target="_blank"
+              >This code</a
+            >
+            now reports an error.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/b3cc106aee871393bc3878e3be6b09e1911f04f7"
+              target="_blank"
+              >Commit by Mistral Contrastin: Warn on calling static methods on
+              traits</a
+            >
+            The typechecker will now issue warnings when calling a private
+            static method on the name of a trait from within the body of the
+            trait. This will promote to a typechecker error in a future release.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/4efd0792f27ed27a428765894848524b9758d0dc"
+              target="_blank"
+              >Commit by Mistral Contrastin: Ban accessing static properties on
+              traits</a
+            >
+            Similarly to the methods case above, but this is a hard typechecker
+            error, rather than a warning.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/0c9f90144e0a9d470b05bc31071290e62757a5e8"
+              target="_blank"
+              >Commit by Mistral Contrastin : Warn against static property
+              redeclaration</a
+            >
+            The typechecker will now warn on static property declarations which
+            repeat a static property from a base class. These properties were
+            not harmless redeclarations but actually created a second property
+            with the same name. This led to strange behavior where methods would
+            operate on the static property of the superclass or the subclass
+            depending on the late static bound type.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Highlights</h2>
+        <ul>
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/72056a5eefca43743f2428e9bb04c2c7c8d5a288"
+              target="_blank"
+              >Commit by vassilmladenov: Model class&lt;T&gt; like
+              classname&lt;T&gt; in xhp attributes</a
+            >
+            You are now allowed to use <code>class&lt;SomeType&gt;</code> and
+            <code>classname&lt;SomeType&gt;</code> as xhp attributes.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/985b511492396d629af6512ddc255cf76155dd04"
+              target="_blank"
+              >Commit by vassilmladenov: Make serialize builtin use lazy class
+              flavors for KindOf[Lazy]Class</a
+            >
+            Values of the <code>LazyClass</code> and <code>Class</code> type now
+            roundtrip correctly through <code>\serialize()</code>.
+            Serializations made on previous versions of hhvm will continue to
+            deserialize as they did before. If you serialize on HHVM 25.7.0 and
+            try to deserialize on 25.6.0, this may result in unexpected
+            behavior.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/159314f561676cc405c1eecd5650aacfe8b6cc1e"
+              target="_blank"
+              >Commit by vassilmladenov: Make APC and internal serialize use
+              lazy classes for class pointers</a
+            >
+            Similarly to the commit above, but now for
+            <code>\apc_*</code> functions.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/43c3bb611744de655f9f4e7867e6273ba684e8e9"
+              target="_blank"
+              >Commit by jtwarren: Fix refcount bug in PBWH</a
+            >
+            Fixes a missing incref in PriorityBridgeWaitHandle. This type is
+            used under the hood of <code>HH\Lib\Async\LowPri</code>.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/12fc967b7d0593f33985b5d4615633fccc4fcfc8"
+              target="_blank"
+              >Commit by Bin Liu: Allow LowPri&lt;void&gt; objects</a
+            >
+            It is now possible to use a
+            <code>HH\Lib\Async\LowPri&lt;void&gt;</code> object at runtime. This
+            was already allowed by the typechecker, but failed with an internal
+            <code>as nonnull</code> type assertion.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/5c223dfb9ce3d4ccfa2761888afcaccd0505f5b8"
+              target="_blank"
+              >Commit by jano: Reduce is_object() and is_scalar() to IsTypeC</a
+            >
+            The JIT will now replace direct calls to
+            <code>\is_object()</code> and <code>\is_scalar()</code> with
+            bytecodes. This is similar to how the function call to
+            <code>\strlen()</code> is optimized away. Owen Yamauchi did write a
+            <a
+              href="https://hhvm.com/blog/311/adding-an-opcode-to-hhbc"
+              target="_blank"
+              >blog post</a
+            >
+            on this in 2012.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/e83acda317d5a8e26cf036ff79696193b9e91579"
+              target="_blank"
+              >Commit by geralt-encore: Move ProtectedInternal experimental
+              feature to preview</a
+            >
+            The unstable feature <code>protected internal</code> has been
+            promoted to Preview. The HIP for this feature is probably still
+            internal to Meta.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/4d0ce07626e745e5a2cdce15d4fcae8bf8e08414"
+              target="_blank"
+              >Commit by Andrew Kennedy : Move OpenTuples and TypeSplat to
+              OngoingRelease</a
+            >
+            The experimental features 'open_tuples' and 'type_splat' have been
+            moved from Preview to OngoingRelease.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/mszabo-wikia/hhvm/commit/de37189f994907cf7d02e8782ba3d3980f60983b"
+              target="_blank"
+              >Commit by mszabo-wikia: Build the mcrouter extension</a
+            >
+            The ext_mcrouter extension, which provides the
+            <code>MCRouter</code> class is now available again.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/mszabo-wikia/hhvm/commit/40eca3840f0f3e7d12feaf781310f94a56d23f9b"
+              target="_blank"
+              >Commit by mszabo-wikia: Consistently check connection validity in
+              AsyncMysqlConnection</a
+            >
+            Calling <code>toString__FOR_DEBUGGING_ONLY</code> on an
+            <code>HH\Lib\Query</code> object when the database connection is
+            busy on a query no longer segfaults hhvm. Instead, an
+            <code>InvalidOperationException</code> is raised. This behavior
+            matches performing a query on a busy database connection.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/97af602ae11a0b0e4f96871946a20b7888cb4062"
+              target="_blank"
+              >Commit by Bin Liu: Use NUMA API to optimize for NUCA
+              architectures</a
+            >
+            A low-level performance optimization. This is disabled in Docker
+            images, because the <code>HHVM_DISABLE_NUMA</code> environment
+            variable is set.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Breaking Changes</h2>
+        <ul>
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/30af968b866fcf16e970259dbe77c791acd5e900"
+              target="_blank"
+              >Commit by Niharika Devanathan: Add a runtime check that a
+              non-async method cannot override an async method</a
+            >
+            The runtime now enforces the belief of the typechecker that
+            <code>public async function fooAsync(): Awaitable&lt;int&gt;</code>
+            may not be overriden by a method without the
+            <code>async</code> keyword. The reason being, the inner type of the
+            awaitable is enforced at runtime if your method is an async method.
+            Whereas an overriding non-async method returning an awaitable will
+            not enforce its inner type. This meant that code that suppressed
+            Hack errors could return an awaitable with a
+            <code>string</code> inside instead of an <code>int</code>.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/87c01f69af89994a8b9877ccbc4f3ed768e40754"
+              target="_blank"
+              >Commit by vassilmladenov: Expand function pointer check, unify
+              with special_function emitter, refactor a bit</a
+            >
+            You are no longer allowed to create a function reference, using the
+            <code>function_name&lt;&gt;</code> syntax to some special built-in
+            functions: <code>HH\classname_to_class</code>, <code>exit</code>,
+            <code>HH\ReifiedGenerics\get_class_from_type</code>,
+            <code>HH\global_get</code>, <code>HH\global_set</code>,
+            <code>HH\global_unset</code>, <code>HH\tag_provenance_here</code>,
+            <code>HH\FIXME\UNSAFE_CAST</code>,
+            <code>HH\FIXME\UNSAFE_NONNULL_CAST</code>
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/d81dc7b2f933a54bd61a0b518f641d8d83d35109"
+              target="_blank"
+              >Commit by vassilmladenov: Update Facts sub/supertypes HHI</a
+            >
+            The functions <code>HH\Facts\subtypes</code>,
+            <code>HH\Facts\transitive_subtypes</code>, and
+            <code>HH\Facts\supertypes</code> now return
+            <code>class&lt;T&gt;</code> instead of <code>string</code>.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Changes to Experimental Features</h2>
+        <ul>
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/23b2e8bd5e8fe85021ca3b5027ccb0df5789424b"
+              target="_blank"
+              >Commit by Andrew Kennedy: Do not reject method overriding method
+              with type-splat parameter</a
+            >
+            This affects users using the experimental features: 'type_splat',
+            'open_tuples'. HHVM now correctly allows the
+            <code>(int $a, string $b)</code> parameter list to override a
+            <code>(...TupleIntString $args)</code> parameter list.
+            <a
+              href="https://github.com/facebook/hhvm/blob/23b2e8bd5e8fe85021ca3b5027ccb0df5789424b/hphp/test/slow/type_splat_interface.php"
+              target="_blank"
+              >This code</a
+            >
+            is now accepted where it previously wasn't.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/77f1b1105e08b135a1664be6130124928559ae7d"
+              target="_blank"
+              >Commit by dlreeves: Change How We Virtualize Operation Typing in
+              Expression Trees</a
+            >
+            This affects users using the experimental features:
+            'expression_trees'. The
+            <code>public static function operationType()</code> method is now
+            required on DSL classes.
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/facebook/hhvm/commit/81aea8e9babe967ac8bffb6c6c9eb6825a82aaf9"
+              target="_blank"
+              >Commit by potomak: Remove nullType</a
+            >
+            This affects users using the experimental features:
+            'expression_trees'. The
+            <code>public static function nullType()</code> method is now
+            ignored. <code>null</code> will be Hack's null in your DSL.
+          </li>
+        </ul>
+      </section>
+    </article>
+  </body>
+</html>

@@ -28,11 +28,11 @@
               >Commit by mheiber: correct handling of parent:: and self</a
             >
             This applies to the method attribute
-            <code>&lt;__NeedsConcrete&gt;</code>. If you mark a method on an
-            abstract type with this attribute, all calls to this method must
-            originate from a non-abstract type. This is useful when you need to
-            call other methods your declared as abstract on yourself. This
-            change makes some false positive errors go away.
+            <code>&lt;&lt;__NeedsConcrete&gt;&gt;</code>. If you mark a method
+            on an abstract type with this attribute, all calls to this method
+            must originate from a non-abstract type. This is useful when you
+            need to call other methods your declared as abstract on yourself.
+            This change makes some false positive errors go away.
           </li>
 
           <li>

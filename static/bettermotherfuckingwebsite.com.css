@@ -8,7 +8,7 @@
  *  - `background-color: #eeeeee`
  *     I would've even made this site's background a nice #EEEEEE
  *     if I wasn't so focused on keeping declarations to a lean 7 fucking lines.
- *  - `max-width: 550px`
+ *  - `max-width: 600px`
  *     Keep it to a nice 60-80 and users might actually read
  *     more than one sentence of your worthless dribble.
  *
@@ -19,7 +19,7 @@
 
 body {
   margin: 40px auto;
-  max-width: 550px;
+  max-width: 600px;
   line-height: 1.6;
   font-size: 18px;
   color: #444;
